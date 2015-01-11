@@ -1,7 +1,12 @@
 package net.voidteam.cicon;
 
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import me.nighteyes604.ItemStay.FrozenItem;
 import me.nighteyes604.ItemStay.ItemStayListener;
 import org.bukkit.Bukkit;
@@ -13,7 +18,10 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.material.Sign;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,8 +61,20 @@ public class ChestIcon extends JavaPlugin implements Listener {
             public void run() {
                 Location displayLocation = event.getChest().getLocation().add(0, 1, 0);
 
-                ItemStack displayStack = new ItemStack(Material.matchMaterial(event.getSignLine((short) 3)));
+
+                String itemCode = event.getSignLine((byte) 3);
+                String[] dataInput = String.valueOf(event.getSignLine((short) 3)).split(":");
+
+                ItemStack displayStack = MaterialUtil.getItem(itemCode);
+
+                /*if( dataInput.length == 2 ) {
+                    displayStack.setDurability(Short.valueOf(dataInput[1]));
+                }*/
+
+
                 Item displayItem = event.getPlayer().getWorld().dropItem(displayLocation, displayStack);
+
+
 
                 Boolean allowed = true;
 
@@ -71,7 +91,7 @@ public class ChestIcon extends JavaPlugin implements Listener {
                     }
                 }
 
-                if (allowed.booleanValue()) {
+                if (allowed) {
                     ItemStayListener.plugin.frozenItems.add(
                             new FrozenItem(event.getPlayer().getName().toLowerCase(),
                                     displayItem.getLocation(), displayItem.getType().name(), displayItem.getItemStack().getType(),
