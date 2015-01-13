@@ -40,10 +40,10 @@ public class ChestIcon extends JavaPlugin implements Listener {
         itemStay = getServer().getPluginManager().getPlugin("ItemStay");
         Plugin chestShop = getServer().getPluginManager().getPlugin("ChestShop");
 
-        if (!itemStay.equals(null) && !itemStay.equals(null)) {
+        if (!itemStay.equals(null) && !chestShop.equals(null)) {
             this.getServer().getPluginManager().registerEvents(this, this);
         } else {
-            Bukkit.getLogger().severe("ItemStay/ChestShop not found! Disabling plugin...");
+            Bukkit.getLogger().severe("ItemStay and/or ChestShop not found! Disabling plugin...");
             this.setEnabled(false);
         }
     }
